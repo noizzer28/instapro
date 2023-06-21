@@ -7,11 +7,11 @@ function renderPostsComponent () {
   const newPosts = posts.map((post) => {
     return                   `<li class="post">
     <div class="post-header" data-user-id="${post.user.id}">
-        <img src=${post.user.imageUrl} class="post-header__user-image">
+        <img src="${post.user.imageUrl}" class="post-header__user-image">
         <p class="post-header__user-name">${post.user.name}</p>
     </div>
     <div class="post-image-container">
-      <img class="post-image" src=${post.imageUrl}>
+      <img class="post-image" src="${post.imageUrl}">
     </div>
     <div class="post-likes">
       <button data-post-id="${post.id}" class="like-button">
@@ -23,7 +23,11 @@ function renderPostsComponent () {
     </div>
     <p class="post-text">
       <span class="user-name">${post.user.name}</span>
-      ${post.description}
+      ${post.description              
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")}
     </p>
     <p class="post-date">
       ${post.createdAt}
@@ -34,8 +38,7 @@ function renderPostsComponent () {
 }
 
 export function renderPostsPageComponent({ appEl }) {
-  // TODO: реализовать рендер постов из api
-  console.log("Актуальный список постов:", posts);
+
   const postsHTML = renderPostsComponent();
   /**
    * TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
