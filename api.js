@@ -93,18 +93,16 @@ export function uploadPost ({description, imageUrl, newToken}) {
   }
 
   export function getUserPosts({ token, userId }) {
-    console.log(userId)
     return fetch(postsHost + "user-posts/" + userId, {
       method: "GET",
       headers: {
         Authorization: token,
       },
-    })
+    })  
       .then((response) => {
         return response.json();
       })
-      // .then((data) => {
-      //   console.log(data);
-      //   return data.posts;
-      // });
+      .then((data) => {
+        return data.posts;
+      });
   }
