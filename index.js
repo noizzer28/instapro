@@ -61,7 +61,7 @@ export const goToPage = (newPage, data) => {
           renderApp();
         })
         .catch((error) => {
-          console.error(error);
+          console.error(error.message);
           goToPage(POSTS_PAGE);
         });
     }
@@ -126,4 +126,4 @@ const renderApp = () => {
   }
 };
 
-goToPage(ADD_POSTS_PAGE);
+goToPage(POSTS_PAGE);

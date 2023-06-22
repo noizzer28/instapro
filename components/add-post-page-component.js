@@ -1,6 +1,8 @@
 import { renderHeaderComponent } from "./header-component.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
 import { uploadPost } from "../api.js";
+import { goToPage } from "../index.js";
+import { POSTS_PAGE } from "../routes.js";
 
 
 export function renderAddPostPageComponent({ appEl, token }) {
@@ -60,7 +62,7 @@ export function renderAddPostPageComponent({ appEl, token }) {
         imageUrl,
         newToken,
       }).then(() => {
-        console.log("here")
+        goToPage(POSTS_PAGE);
       })
     });
   };

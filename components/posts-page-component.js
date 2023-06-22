@@ -24,7 +24,11 @@ function renderPostsComponent () {
     </div>
     <p class="post-text">
       <span class="user-name">${post.user.name}</span>
-      ${typeof post.description === 'object' ? '' : post.description}
+      ${typeof post.description === 'object' ? '' : post.description
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")}
     </p>
     <p class="post-date">
       ${post.createdAt}

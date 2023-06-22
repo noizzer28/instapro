@@ -36,14 +36,16 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
       console.log(file)
       if (file) {
         const lableEl = document.querySelector(".file-upload-label");
-        console.log(lableEl);
         lableEl.setAttribute("disabled", true);
         lableEl.textContent = "Загружаю файл...";
         uploadImage({ file }).then(({ fileUrl }) => {
           imageUrl = fileUrl;
           onImageUrlChange(imageUrl);
           render();
-        });
+        }).catch((error) => {
+          alert(error.message);
+          render();
+        })
       }
     });
 
