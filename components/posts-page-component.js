@@ -5,7 +5,8 @@ import { posts, goToPage } from "../index.js";
 
 function renderPostsComponent () {
   const newPosts = posts.map((post) => {
-    return                   `<li class="post">
+    return `
+      <li class="post">
     <div class="post-header" data-user-id="${post.user.id}">
         <img src="${post.user.imageUrl}" class="post-header__user-image">
         <p class="post-header__user-name">${post.user.name}</p>
@@ -23,18 +24,14 @@ function renderPostsComponent () {
     </div>
     <p class="post-text">
       <span class="user-name">${post.user.name}</span>
-      ${post.description              
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")}
+      ${typeof post.description === 'object' ? '' : post.description}
     </p>
     <p class="post-date">
       ${post.createdAt}
     </p>
   </li>`
   }).join("");
-  return newPosts;
+    return newPosts;
 }
 
 export function renderPostsPageComponent({ appEl }) {
