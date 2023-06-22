@@ -66,7 +66,11 @@ export function uploadImage({ file }) {
     method: "POST",
     body: data,
   }).then((response) => {
-    return response.json();
+    if (response.status == 400) {
+      throw new Error("Файл не должен превышать 5 мегабайт")
+    } else {
+      return response.json();
+    }
   });
 }
 
