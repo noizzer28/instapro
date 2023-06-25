@@ -19,6 +19,7 @@ export function getPosts({ token }) {
       return response.json();
     })
     .then((data) => {
+      console.log(data.posts)
       return data.posts;
     });
 }
@@ -105,4 +106,34 @@ export function uploadPost ({description, imageUrl, newToken}) {
       .then((data) => {
         return data.posts;
       });
+  }
+
+
+  export function likePost(postId, token) {
+    return fetch(postsHost + postId + "/like", {
+      method: "POST",
+      headers: {
+        Authorization: token,
+      },
+    }).then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+    });
+  }
+
+  export function dislikePost(postId, token) {
+    return fetch(postsHost + postId + "/dislike", {
+      method: "POST",      
+      headers: {
+        Authorization: token,
+      },
+    }).then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data.post)
+      return data.post
+    });
   }

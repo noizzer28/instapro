@@ -1,7 +1,7 @@
-import { USER_POSTS_PAGE } from "../routes.js";
+import { POSTS_PAGE, USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage, user } from "../index.js";
-
+import { posts, goToPage } from "../index.js";
+import { dislikePost, likePost } from "../api.js";
 
 function renderPostsComponent () {
   const newPosts = posts.map((post) => {
@@ -15,12 +15,12 @@ function renderPostsComponent () {
       <img class="post-image" src="${post.imageUrl}">
     </div>
     <div class="post-likes">
-      <button data-post-id="${post.id}" class="like-button">
-        <img ${post.isLiked ? `src="./assets/images/like-active.svg"` : `src="./assets/images/like-not-active.svg"`}>
-      </button>
-      <p class="post-likes-text">
-        Нравится: <strong>${post.likes.length}</strong>
-      </p>
+    <button data-postid="${post.id}" class="like-button" data-toggle = ${post.isLiked}>
+            <img ${post.isLiked ? `src="./assets/images/like-active.svg"` : `src="./assets/images/like-not-active.svg"`}>
+          </button>
+          <p class="post-likes-text">
+            Нравится: <strong>${post.likes.length}</strong>
+          </p>
     </div>
     <p class="post-text">
       <span class="user-name">${post.user.name}</span>
@@ -38,9 +38,8 @@ function renderPostsComponent () {
     return newPosts;
 }
 
-export function renderPostsPageComponent({ appEl }) {
-
-  const postsHTML = renderPostsComponent();
+export function renderPostsPageComponent({ appEl, token }) { 
+  let postsHTML = renderPostsComponent();
   /**
    * TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
    * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
@@ -62,12 +61,33 @@ export function renderPostsPageComponent({ appEl }) {
 
   for (let userEl of document.querySelectorAll(".post-header")) {
     userEl.addEventListener("click", () => {
-      console.log(userEl.dataset.name);
       goToPage(USER_POSTS_PAGE, {
         userId: userEl.dataset.userId,
         userName: userEl.dataset.name,
         userImg: userEl.dataset.img,
       });
     });
+  }
+
+  // renderLikeComponent()
+  for (let likeEl of document.querySelectorAll(".like-button")) {
+    likeEl.addEventListener("click", () => {
+      let postId = likeEl.dataset.postid
+      if (likeEl.dataset.toggle == "true") {
+        console.log("here1")
+        dislikePost(postId, token)
+        .then(() => {
+          goToPage(POSTS_PAGE);
+        })
+
+      } else {
+        console.log("here2")
+        likePost(postId, token)
+        .then(()=> {
+          goToPage(POSTS_PAGE);
+        })
+
+      }
+    })
   }
 }

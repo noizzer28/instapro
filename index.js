@@ -38,6 +38,7 @@ export const logout = () => {
  * Включает страницу приложения
  */
 export const goToPage = (newPage, data) => {  
+  console.log(1)
   if (
     [
       POSTS_PAGE,
@@ -70,15 +71,14 @@ export const goToPage = (newPage, data) => {
     }
 
     if (newPage === USER_POSTS_PAGE) {
-      console.log(data)
+      userName = data.userName,
+      userImage = data.userImg,
       getUserPosts({
         token: getToken(), 
         userId: data.userId,
       }).then((response) => {
         page = USER_POSTS_PAGE;
         posts = response;
-        userName = data.userName,
-        userImage = data.userImg,
         renderApp();
       })
 
@@ -88,7 +88,6 @@ export const goToPage = (newPage, data) => {
 
     return;
   }
-
   throw new Error("страницы не существует");
 };
 
@@ -125,6 +124,7 @@ const renderApp = () => {
   if (page === POSTS_PAGE) {
     return renderPostsPageComponent({
       appEl,
+      token: getToken(),
     });
   }
 
