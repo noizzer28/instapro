@@ -19,7 +19,6 @@ export function getPosts({ token }) {
       return response.json();
     })
     .then((data) => {
-      console.log(data.posts)
       return data.posts;
     });
 }
@@ -119,7 +118,8 @@ export function uploadPost ({description, imageUrl, newToken}) {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
+      console.log(data.post)
+      return data.post
     });
   }
 

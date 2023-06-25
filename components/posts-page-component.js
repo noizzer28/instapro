@@ -2,12 +2,17 @@ import { POSTS_PAGE, USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage } from "../index.js";
 import { dislikePost, likePost } from "../api.js";
-import { formatDistanceToNow } from "date-fns";
-let date = formatDistanceToNow(new Date);
-console.log(date)
+import { formatDistanceToNow, format } from "date-fns";
+import { locale } from 'date-fns/locale/ru'
+
 
 function renderPostsComponent () {
   const newPosts = posts.map((post) => {
+    const postDate = new Date(post.createdAt);
+    const ruLocale = require("date-fns/locale/ru")
+    const newPostDate = formatDistanceToNow(postDate, 
+      {addSuffix: true},
+      {locale: ruLocale})
     return `
       <li class="post">
     <div class="post-header" data-user-id="${post.user.id}" data-img="${post.user.imageUrl}" data-name="${post.user.name}">
@@ -34,7 +39,7 @@ function renderPostsComponent () {
       .replaceAll('"', "&quot;")}
     </p>
     <p class="post-date">
-      ${post.createdAt}
+      ${newPostDate}
     </p>
   </li>`
   }).join("");
@@ -77,16 +82,18 @@ export function renderPostsPageComponent({ appEl, token }) {
     likeEl.addEventListener("click", () => {
       let postId = likeEl.dataset.postid
       if (likeEl.dataset.toggle == "true") {
-        console.log("here1")
         dislikePost(postId, token)
         .then(() => {
+          // likeEl.dataset.toggle=="false"
+          // renderPostsComponent(appEl, token)
           goToPage(POSTS_PAGE);
         })
 
       } else {
-        console.log("here2")
         likePost(postId, token)
         .then(()=> {
+          // likeEl.dataset.toggle == "true"
+          // renderPostsComponent(appEl, token)
           goToPage(POSTS_PAGE);
         })
 
