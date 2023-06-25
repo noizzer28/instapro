@@ -1,13 +1,13 @@
 import { POSTS_PAGE, USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage } from "../index.js";
+import { posts, goToPage, renderApp } from "../index.js";
 import { dislikePost, likePost } from "../api.js";
 import { formatDistanceToNow, format } from "date-fns";
 import { locale } from 'date-fns/locale/ru'
 
 
 function renderPostsComponent () {
-  const newPosts = posts.map((post) => {
+  const newPosts = posts.map((post, index) => {
     const postDate = new Date(post.createdAt);
     const ruLocale = require("date-fns/locale/ru")
     const newPostDate = formatDistanceToNow(postDate, 
@@ -23,7 +23,7 @@ function renderPostsComponent () {
       <img class="post-image" src="${post.imageUrl}">
     </div>
     <div class="post-likes">
-    <button data-postid="${post.id}" class="like-button" data-toggle = ${post.isLiked}>
+    <button data-postid="${post.id}" class="like-button" data-toggle = "${post.isLiked}" data-index="${index}">
             <img ${post.isLiked ? `src="./assets/images/like-active.svg"` : `src="./assets/images/like-not-active.svg"`}>
           </button>
           <p class="post-likes-text">
@@ -48,10 +48,6 @@ function renderPostsComponent () {
 
 export function renderPostsPageComponent({ appEl, token }) { 
   let postsHTML = renderPostsComponent();
-  /**
-   * TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
-   * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
-   */
   const appHtml = `
               <div class="page-container">
                 <div class="header-container">
@@ -81,20 +77,19 @@ export function renderPostsPageComponent({ appEl, token }) {
   for (let likeEl of document.querySelectorAll(".like-button")) {
     likeEl.addEventListener("click", () => {
       let postId = likeEl.dataset.postid
+      let index = likeEl.dataset.index
       if (likeEl.dataset.toggle == "true") {
         dislikePost(postId, token)
-        .then(() => {
-          // likeEl.dataset.toggle=="false"
-          // renderPostsComponent(appEl, token)
-          goToPage(POSTS_PAGE);
+        .then((data) => {
+          posts[index] = data;
+          renderApp()
         })
 
       } else {
         likePost(postId, token)
-        .then(()=> {
-          // likeEl.dataset.toggle == "true"
-          // renderPostsComponent(appEl, token)
-          goToPage(POSTS_PAGE);
+        .then((data)=> {
+          posts[index] = data;
+          renderApp()
         })
 
       }

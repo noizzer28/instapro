@@ -118,7 +118,6 @@ export function uploadPost ({description, imageUrl, newToken}) {
       return response.json();
     })
     .then((data) => {
-      console.log(data.post)
       return data.post
     });
   }
@@ -133,7 +132,6 @@ export function uploadPost ({description, imageUrl, newToken}) {
       return response.json();
     })
     .then((data) => {
-      console.log(data.post)
       return data.post
     });
   }
