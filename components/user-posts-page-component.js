@@ -60,6 +60,10 @@ export function renderUserPostsComponent({ appEl, token }) {
 
       for (let likeEl of document.querySelectorAll(".like-button")) {
         likeEl.addEventListener("click", () => {
+          if  (!token) {
+            alert("Авторизуйтесь, чтобы ставить лайки")
+            return
+          }
           let postId = likeEl.dataset.postid
           let index = likeEl.dataset.index
           if (likeEl.dataset.toggle == "true") {
