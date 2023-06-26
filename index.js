@@ -130,7 +130,7 @@ export const renderApp = () => {
   if (page === USER_POSTS_PAGE) {
     return renderUserPostsComponent({
       appEl,
-      
+      token: getToken()
     })
   }
 };

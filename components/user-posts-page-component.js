@@ -1,15 +1,16 @@
 import {renderHeaderComponent} from './header-component.js';
-import { posts, userImage, userName } from "../index.js";
+import { posts, userImage, userName, renderApp} from "../index.js";
+import { likePost, dislikePost } from '../api.js';
 
 function renderUserPosts() {
-    const userPosts = posts.map((post) => {
+    const userPosts = posts.map((post, index) => {
             return `
               <li class="post">
             <div class="post-image-container">
               <img class="post-image" src="${post.imageUrl}">
             </div>
             <div class="post-likes">
-              <button data-post-id="${post.id}" class="like-button">
+              <button data-postid="${post.id}" class="like-button" data-toggle = "${post.isLiked}" data-index="${index}">
                 <img ${post.isLiked ? `src="./assets/images/like-active.svg"` : `src="./assets/images/like-not-active.svg"`}>
               </button>
               <p class="post-likes-text">
@@ -33,7 +34,7 @@ function renderUserPosts() {
 }
 
 
-export function renderUserPostsComponent({ appEl }) {
+export function renderUserPostsComponent({ appEl, token }) {
     const userPostsHTML = renderUserPosts();
       const appHtml = `
       <div class="page-container">
@@ -55,5 +56,29 @@ export function renderUserPostsComponent({ appEl }) {
       renderHeaderComponent({
         element: document.querySelector(".header-container"),
       }); 
-  
+      
+
+      for (let likeEl of document.querySelectorAll(".like-button")) {
+        likeEl.addEventListener("click", () => {
+          let postId = likeEl.dataset.postid
+          let index = likeEl.dataset.index
+          if (likeEl.dataset.toggle == "true") {
+            dislikePost(postId, token)
+            .then((data) => {
+              console.log(data)
+              console.log(posts)
+              posts[index] = data;
+              renderApp()
+            })
+    
+          } else {
+            likePost(postId, token)
+            .then((data)=> {
+              posts[index] = data;
+              renderApp()
+            })
+    
+          }
+        })
+      }
 }
