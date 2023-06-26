@@ -160,3 +160,20 @@ strong {
     height: 32px;
   }
 }
+
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.like-icon {
+  animation: heartbeat 1s infinite;
+}

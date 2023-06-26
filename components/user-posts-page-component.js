@@ -11,7 +11,7 @@ function renderUserPosts() {
             </div>
             <div class="post-likes">
               <button data-postid="${post.id}" class="like-button" data-toggle = "${post.isLiked}" data-index="${index}">
-                <img ${post.isLiked ? `src="./assets/images/like-active.svg"` : `src="./assets/images/like-not-active.svg"`}>
+                <img  class="like-icon" ${post.isLiked ? `src="./assets/images/like-active.svg"` : `src="./assets/images/like-not-active.svg"`}>
               </button>
               <p class="post-likes-text">
                 Нравится: <strong>${post.likes.length}</strong>
@@ -64,15 +64,15 @@ export function renderUserPostsComponent({ appEl, token }) {
             alert("Авторизуйтесь, чтобы ставить лайки")
             return
           }
+          likeEl.classList.add("like-icon")
           let postId = likeEl.dataset.postid
           let index = likeEl.dataset.index
           if (likeEl.dataset.toggle == "true") {
             dislikePost(postId, token)
             .then((data) => {
-              console.log(data)
-              console.log(posts)
               posts[index] = data;
               renderApp()
+              likeEl.classList.remove("like-icon")
             })
     
           } else {
@@ -80,6 +80,7 @@ export function renderUserPostsComponent({ appEl, token }) {
             .then((data)=> {
               posts[index] = data;
               renderApp()
+              likeEl.classList.remove("like-icon")
             })
     
           }

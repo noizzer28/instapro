@@ -23,8 +23,8 @@ function renderPostsComponent () {
       <img class="post-image" src="${post.imageUrl}">
     </div>
     <div class="post-likes">
-    <button data-postid="${post.id}" class="like-button" data-toggle = "${post.isLiked}" data-index="${index}">
-            <img ${post.isLiked ? `src="./assets/images/like-active.svg"` : `src="./assets/images/like-not-active.svg"`}>
+    <button data-postid="${post.id}" class="like-button " data-toggle = "${post.isLiked}" data-index="${index}">
+            <img  ${post.isLiked ? `src="./assets/images/like-active.svg"` : `src="./assets/images/like-not-active.svg"`}>
           </button>
           <p class="post-likes-text">
             Нравится: <strong>${post.likes.length}</strong>
@@ -80,6 +80,7 @@ export function renderPostsPageComponent({ appEl, token }) {
         alert("Авторизуйтесь, чтобы ставить лайки")
         return
       }
+      likeEl.classList.add("like-icon")
       let postId = likeEl.dataset.postid
       let index = likeEl.dataset.index
       if (likeEl.dataset.toggle == "true") {
@@ -87,6 +88,7 @@ export function renderPostsPageComponent({ appEl, token }) {
         .then((data) => {
           posts[index] = data;
           renderApp()
+          likeEl.classList.remove("like-icon")
         })
 
       } else {
@@ -94,6 +96,7 @@ export function renderPostsPageComponent({ appEl, token }) {
         .then((data)=> {
           posts[index] = data;
           renderApp()
+          likeEl.classList.remove("like-icon")
         })
 
       }
