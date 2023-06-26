@@ -106,29 +106,30 @@ export function renderPostsPageComponent({ appEl, token }) {
     })
   }
 
-
-  for (const postEl of document.querySelectorAll(".post-header")) {
-    const userID = postEl.dataset.userId
-    const postID = postEl.dataset.postid
-    const deleteButton = postEl.querySelector(".post-delete-button")
-    postEl.addEventListener("mouseover", () => {
-
-      if (user._id != userID) {
-        console.log("Можно удалять только собственные посты")
-        return
-      } else {
-        deleteButton.style.display = "block"
-        deleteButton.addEventListener('click', ()=> {
-          event.stopPropagation()
-          deletePost(postID, token)
-          goToPage(POSTS_PAGE)
+  if (user) {
+    for (const postEl of document.querySelectorAll(".post-header")) {
+      const userID = postEl.dataset.userId
+      const postID = postEl.dataset.postid
+      const deleteButton = postEl.querySelector(".post-delete-button")
+      postEl.addEventListener("mouseover", () => {
+        if (user._id != userID) {
+          console.log("Можно удалять только собственные посты")
           return
-        })
-      }
-    })
-    postEl.addEventListener("mouseout", () => {
-      deleteButton.style.display = "none"
-    })
-
+        } else {
+          deleteButton.style.display = "block"
+          deleteButton.addEventListener('click', ()=> {
+            event.stopPropagation()
+            deletePost(postID, token)
+            goToPage(POSTS_PAGE)
+            return
+          })
+        }
+      })
+      postEl.addEventListener("mouseout", () => {
+        deleteButton.style.display = "none"
+      })
+  
+    }
   }
+
 }
