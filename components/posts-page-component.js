@@ -1,8 +1,8 @@
 import { POSTS_PAGE, USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage, renderApp } from "../index.js";
-import { dislikePost, likePost } from "../api.js";
-import { formatDistanceToNow, format } from "date-fns";
+import { posts, goToPage, renderApp, user } from "../index.js";
+import { deletePost, dislikePost, likePost } from "../api.js";
+import { formatDistanceToNow } from "date-fns";
 import { locale } from 'date-fns/locale/ru'
 
 
@@ -15,9 +15,12 @@ function renderPostsComponent () {
       {locale: ruLocale})
     return `
       <li class="post">
-    <div class="post-header" data-user-id="${post.user.id}" data-img="${post.user.imageUrl}" data-name="${post.user.name}">
-        <img src="${post.user.imageUrl}" class="post-header__user-image" >
-        <p class="post-header__user-name">${post.user.name}</p>
+    <div class="post-header" data-user-id="${post.user.id}" data-img="${post.user.imageUrl}" data-name="${post.user.name}"  data-postid="${post.id}">
+        <div class="post-header-flex">
+          <img src="${post.user.imageUrl}" class="post-header__user-image" >
+          <p class="post-header__user-name">${post.user.name}</p>
+        </div>
+        <img class="post-delete-button" src="https://cdn.iconscout.com/icon/free/png-512/free-cross-274-458475.png?f=avif&w=256">
     </div>
     <div class="post-image-container">
       <img class="post-image" src="${post.imageUrl}">
@@ -101,5 +104,31 @@ export function renderPostsPageComponent({ appEl, token }) {
 
       }
     })
+  }
+
+
+  for (const postEl of document.querySelectorAll(".post-header")) {
+    const userID = postEl.dataset.userId
+    const postID = postEl.dataset.postid
+    const deleteButton = postEl.querySelector(".post-delete-button")
+    postEl.addEventListener("mouseover", () => {
+
+      if (user._id != userID) {
+        console.log("Можно удалять только собственные посты")
+        return
+      } else {
+        deleteButton.style.display = "block"
+        deleteButton.addEventListener('click', ()=> {
+          event.stopPropagation()
+          deletePost(postID, token)
+          goToPage(POSTS_PAGE)
+          return
+        })
+      }
+    })
+    postEl.addEventListener("mouseout", () => {
+      deleteButton.style.display = "none"
+    })
+
   }
 }

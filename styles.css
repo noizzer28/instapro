@@ -52,6 +52,21 @@
   align-items: center;
   margin-bottom: 10px;
   cursor: pointer;
+  justify-content: space-between;
+}
+.post-header-flex{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.post-delete-button{
+  width: 20px;
+  height: 20px;
+  display: none;
+  transition-duration: 0.3s;
+}
+.post-delete-button:hover {
+  transform: scale(1.2);
 }
 
 .post-header__user-image {
