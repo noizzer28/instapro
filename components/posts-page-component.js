@@ -3,16 +3,14 @@ import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage, renderApp, user } from "../index.js";
 import { deletePost, dislikePost, likePost } from "../api.js";
 import { formatDistanceToNow } from "date-fns";
-import { locale } from 'date-fns/locale/ru'
+import { ru } from 'date-fns/locale';
 
 
 function renderPostsComponent () {
   const newPosts = posts.map((post, index) => {
     const postDate = new Date(post.createdAt);
-    const ruLocale = require("date-fns/locale/ru")
-    const newPostDate = formatDistanceToNow(postDate, 
-      {addSuffix: true},
-      {locale: ruLocale})
+    // const ru = require("date-fns/locale/ru")
+    const newPostDate = formatDistanceToNow(postDate, {addSuffix: true, locale: ru})
     return `
       <li class="post">
     <div class="post-header" data-user-id="${post.user.id}" data-img="${post.user.imageUrl}" data-name="${post.user.name}"  data-postid="${post.id}">
@@ -113,7 +111,6 @@ export function renderPostsPageComponent({ appEl, token }) {
       const deleteButton = postEl.querySelector(".post-delete-button")
       postEl.addEventListener("mouseover", () => {
         if (user._id != userID) {
-          console.log("Можно удалять только собственные посты")
           return
         } else {
           deleteButton.style.display = "block"
